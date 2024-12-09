@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ice Cream Parlor - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Simple Ice Cream APP</h1>
+    </header>
+
+    <section id="search">
+        <form action="/" method="POST">
+            <label for="search_query">Search for a Flavor:</label>
+            <input type="text" name="search_query" id="search_query" placeholder="Search by name or description">
+            <button type="submit">Search</button>
+        </form>
+    </section>
+
+    <section id="flavors">
+        <h2>Seasonal Flavors</h2>
+        {% if flavors %}
+            {% for flavor in flavors %}
+                <div class="flavor-card">
+                    <h3>{{ flavor['flavor_name'] }}</h3>
+                    <p>{{ flavor['description'] }}</p>
+                    {% if flavor['available'] %}
+                        <form action="{{ url_for('add_to_cart_route', flavor_id=flavor['id']) }}" method="POST">
+                            <label for="quantity">Quantity:</label>
+                            <input type="number" name="quantity" min="1" value="1">
+                            <button type="submit">Add to Cart</button>
+                        </form>
+                    {% else %}
+                        <p class="unavailable">Not Available</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No flavors found matching your search criteria.</p>
+        {% endif %}
+    </section>
+
+    <section id="cart">
+        <h2>Your Cart</h2>
+        <ul>
+            {% for item in cart %}
+                <li>{{ item['flavor_name'] }} - Quantity: {{ item['quantity'] }}
+                    <form action="{{ url_for('remove_from_cart_route', cart_item_id=item['id'], flavor_id=item['flavor_id']) }}" method="POST">
+                        <button type="submit">Remove</button>
+                    </form>
+                </li>
+            {% else %}
+                <li>Your cart is empty!</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section id="add-allergen">
+        <h2>Add a New Allergen</h2>
+        <form action="/" method="POST">
+            <label for="allergen_name">Allergen Name:</label>
+            <input type="text" id="allergen_name" name="allergen_name" required>
+            <button type="submit">Add Allergen</button>
+        </form>
+    </section>
+
+    <section id="customer-suggestions">
+        <h2>Submit Your Suggestion</h2>
+        <form action="/" method="POST">
+            <label for="suggestion">Your Suggestion:</label>
+            <textarea name="suggestion" id="suggestion" rows="4" required></textarea>
+            <button type="submit">Submit Suggestion</button>
+        </form>
+    </section>
+    <footer>
+        <a href="{{ url_for('admin') }}">Admin Panel</a>
+    </footer>
+</body>
+</html>

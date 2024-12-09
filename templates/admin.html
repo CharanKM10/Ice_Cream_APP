@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Admin Panel</h1>
+    </header>
+
+    <section id="add-flavor">
+        <h2>Add Seasonal Flavor</h2>
+        <form method="POST">
+            <label for="flavor_name">Flavor Name:</label>
+            <input type="text" id="flavor_name" name="flavor_name" required>
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description">
+            <label for="available">Available:</label>
+            <input type="checkbox" id="available" name="available">
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" min="1" required>
+            <button type="submit">Add Flavor</button>
+        </form>
+    </section>
+
+    <section id="manage-flavors">
+        <h2>Manage Seasonal Flavors</h2>
+        <ul>
+            {% for flavor in flavors %}
+                <li>
+                    {{ flavor['flavor_name'] }} - {{ flavor['quantity'] }} available
+                    <form action="{{ url_for('delete_flavor', flavor_id=flavor['id']) }}" method="POST" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section id="manage-ingredients">
+        <h2>Ingredients</h2>
+        <form method="POST">
+            <label for="ingredient_name">Add Ingredient:</label>
+            <input type="text" id="ingredient_name" name="ingredient_name" required>
+            <button type="submit">Add Ingredient</button>
+        </form>
+        <ul>
+            {% for ingredient in ingredients %}
+                <li>{{ ingredient['ingredient_name'] }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section id="manage-allergens">
+        <h2>Allergens</h2>
+        <form method="POST">
+            <label for="allergen_name">Add Allergen:</label>
+            <input type="text" id="allergen_name" name="allergen_name" required>
+            <button type="submit">Add Allergen</button>
+        </form>
+        <ul>
+            {% for allergen in allergens %}
+                <li>{{ allergen['allergen_name'] }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section id="customer-suggestions">
+        <h2>Customer Suggestions</h2>
+        <ul>
+            {% for suggestion in suggestions %}
+                <li>{{ suggestion['suggestion'] }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <footer>
+        <a href="{{ url_for('home') }}">Go to Home</a>
+    </footer>
+</body>
+</html>
